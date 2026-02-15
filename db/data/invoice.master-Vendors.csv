@@ -1,0 +1,4 @@
+vendorID;name;searchTerm;taxID;street;city;postalCode;country;email;phone;paymentTerms_code;defaultCurrency_code;isBlocked
+V001;Acme Corporation;ACME;12-3456789;123 Main St;New York;10001;USA;ap@acme.com;+1-212-555-0100;0001;USD;false
+V002;Global Supplies Ltd;GLOBAL;GB123456789;45 Oxford St;London;SW1A 1AA;GBR;invoices@globalsupplies.co.uk;+44-20-7123-4567;0002;GBP;false
+V003;TechParts GmbH;TECHPARTS;DE987654321;Hauptstrasse 10;Munich;80331;DEU;rechnungen@techparts.de;+49-89-1234567;Z001;EUR;false

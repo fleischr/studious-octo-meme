@@ -1,0 +1,1 @@
+ID,invoice_ID,paymentDate,paymentAmount,currency_code,paymentMethod,paymentReference,bankAccount_ID,status_code,notes,clearingDocument,createdAt,createdBy,modifiedAt,modifiedBy

@@ -1,0 +1,189 @@
+{
+  "_version": "1.81.0",
+  "sap.app": {
+    "id": "project1",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.20.1",
+      "toolsId": "f21be8eb-d803-420e-80c9-630e0a859c8c"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/invoice/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.144.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "project1.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "InvoicesList",
+          "target": "InvoicesList"
+        },
+        {
+          "pattern": "Invoices({key}):?query:",
+          "name": "InvoicesObjectPage",
+          "target": "InvoicesObjectPage"
+        },
+        {
+          "pattern": "Invoices({key})/items({key2}):?query:",
+          "name": "InvoiceItemsObjectPage",
+          "target": "InvoiceItemsObjectPage"
+        }
+      ],
+      "targets": {
+        "InvoicesList": {
+          "type": "Component",
+          "id": "InvoicesList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/Invoices",
+              "variantManagement": "Page",
+              "navigation": {
+                "Invoices": {
+                  "detail": {
+                    "route": "InvoicesObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable",
+                    "selectionMode": "Single" 
+                  },
+                  "actions": {
+                    "Tokenize": {
+                      "text": "Pay Invoice via Tempo",
+                      "requiresSelection": true,
+                      "press": "project1.ext.CustomActions.onPayInvoicePress"
+                    }
+                  }
+                }
+              },
+              "content": {
+                "header": {
+                    "actions": {
+                      "ConnectToTempo": {
+                        "press": "project1.ext.CustomActions.onConnectToTempoPress",
+                        "enabled": true,
+                        "visible": true,
+                        "text": "Connect to Tempo"
+                      }
+                    }
+                }
+              }
+            }
+          }
+        },
+        "InvoicesObjectPage": {
+          "type": "Component",
+          "id": "InvoicesObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/Invoices",
+              "navigation": {
+                "items": {
+                  "detail": {
+                    "route": "InvoiceItemsObjectPage"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "InvoiceItemsObjectPage": {
+          "type": "Component",
+          "id": "InvoiceItemsObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/Invoices/items"
+            }
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.fe": {
+    "app": {
+      "enableLazyLoading": true
+    }
+  }
+}

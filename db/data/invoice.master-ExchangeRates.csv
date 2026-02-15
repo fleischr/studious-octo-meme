@@ -1,0 +1,4 @@
+sourceCurrency_code;targetCurrency_code;validFrom;validTo;rate;rateType
+EUR;USD;2024-01-01;2099-12-31;1.08;M
+GBP;USD;2024-01-01;2099-12-31;1.27;M
+USD;USD;2024-01-01;2099-12-31;1.00;M

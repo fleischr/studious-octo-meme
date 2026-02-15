@@ -1,0 +1,1 @@
+ID,invoice_ID,itemNumber,description,quantity,unitOfMeasure,unitPrice,netAmount,taxCode,taxRate,taxAmount,grossAmount,glAccount,costCenter,profitCenter,wbsElement,purchaseOrderItem,materialNumber,notes,createdAt,createdBy,modifiedAt,modifiedBy

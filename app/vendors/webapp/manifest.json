@@ -1,0 +1,83 @@
+{
+  "_version": "1.49.0",
+  "sap.app": {
+    "id": "invoice.vendors",
+    "type": "application",
+    "title": "Vendor Management",
+    "description": "Manage Vendor Master Data",
+    "applicationVersion": {
+      "version": "1.0.0"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/invoice/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "dependencies": {
+      "libs": {
+        "sap.fe.templates": {}
+      }
+    },
+    "models": {
+      "": {
+        "dataSource": "mainService",
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      }
+    },
+    "routing": {
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "VendorsList",
+          "target": "VendorsList"
+        },
+        {
+          "pattern": "Vendors({key}):?query:",
+          "name": "VendorsObjectPage",
+          "target": "VendorsObjectPage"
+        }
+      ],
+      "targets": {
+        "VendorsList": {
+          "type": "Component",
+          "id": "VendorsList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "entitySet": "Vendors"
+            }
+          }
+        },
+        "VendorsObjectPage": {
+          "type": "Component",
+          "id": "VendorsObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "entitySet": "Vendors"
+            }
+          }
+        }
+      }
+    }
+  }
+}

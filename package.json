@@ -1,0 +1,52 @@
+{
+  "name": "invoice-processing",
+  "version": "1.0.0",
+  "description": "SAP CAP Accounts Payable Invoice Processing Application",
+  "repository": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@privy-io/node": "^0.8.0",
+    "@sap/cds": "^7",
+    "dotenv": "^17.3.1",
+    "express": "^4"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^1",
+    "@sap/cds-dk": "^7",
+    "@sap/eslint-plugin-cds": "^2",
+    "@sap/ux-specification": "^1",
+    "cds-plugin-ui5": "^0.13.0"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch": "cds watch",
+    "deploy": "cds deploy",
+    "watch-project1": "cds watch --open project1/index.html?sap-ui-xx-viewCache=false --livereload false"
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sqlite",
+        "credentials": {
+          "database": "invoice.db"
+        }
+      },
+      "attachments": {
+        "kind": "local-fs",
+        "root": "./attachments"
+      }
+    },
+    "features": {
+      "fetch_csrf": true
+    }
+  },
+  "workspaces": [
+    "app/*"
+  ],
+  "sapux": [
+    "app/project1"
+  ]
+}

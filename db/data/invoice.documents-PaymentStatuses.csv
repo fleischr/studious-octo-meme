@@ -1,0 +1,8 @@
+code;name;description;sortOrder;isFinal
+PENDING;Pending;Payment is pending;10;false
+SCHEDULED;Scheduled;Payment has been scheduled;20;false
+PROCESSING;Processing;Payment is being processed;30;false
+PARTIAL;Partially Paid;Invoice partially paid;40;false
+COMPLETED;Completed;Payment completed successfully;50;true
+FAILED;Failed;Payment failed;60;true
+CANCELLED;Cancelled;Payment cancelled;70;true

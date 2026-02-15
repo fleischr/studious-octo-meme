@@ -1,0 +1,38 @@
+# Node modules
+node_modules/
+package-lock.json
+
+# CAP
+.cds-services.json
+gen/
+_out/
+*.db
+*.db-journal
+
+# Attachments
+attachments/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+
+nul
+.claude/
+
+privy-hello-eth.js
