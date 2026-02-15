@@ -147,13 +147,8 @@ annotate service.Invoices with @(
     UI.LineItem : [
         {
             $Type : 'UI.DataField',
-            Label : 'createdBy',
-            Value : createdBy,
-        },
-        {
-            $Type : 'UI.DataField',
-            Label : 'modifiedBy',
-            Value : modifiedBy,
+            Label : 'vendor_vendorID',
+            Value : vendor_vendorID,
         },
         {
             $Type : 'UI.DataField',
@@ -167,6 +162,27 @@ annotate service.Invoices with @(
             $Type : 'UI.DataField',
             Value : postingDate,
         },
+        {
+            $Type : 'UI.DataField',
+            Value : vendorInvoiceRef,
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : grossAmount,
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : netAmount,
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : taxAmount,
+        },
+                    {
+            $Type : 'UI.DataField',
+            Label : 'baseCurrency_code',
+            Value : baseCurrency_code,
+        }
     ],
 );
 

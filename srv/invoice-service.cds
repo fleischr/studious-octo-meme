@@ -66,6 +66,7 @@ service InvoiceService @(path: '/invoice') {
   };
 
   type payAPInvoice_req {
+    InvoiceNumber : String;
     InvoiceDate : String;
     VendorID : String;
     PurchaseOrder: String;
@@ -74,6 +75,9 @@ service InvoiceService @(path: '/invoice') {
     VendorDocXRef2: String;
     VendorDocXRef3: String;
     VendorAddress: String;
+    TaxAddress: String;
+    NetAmount: String;
+    TaxAmount: String;
     TotalAmount: String;
     Currency: String;
   }
@@ -83,6 +87,8 @@ service InvoiceService @(path: '/invoice') {
       TxnHash : String;
       WalletAddress : String;
       Message : String;
+      BlockExplorerLink1: String;
+      BlockExplorerLink2: String;
   }
 
   action payAPInvoice( reqData : payAPInvoice_req ) returns payAPInvoice_resp;

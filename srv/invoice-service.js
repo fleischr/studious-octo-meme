@@ -1,4 +1,5 @@
 const cds = require('@sap/cds');
+const { transferTIP20Token } = require('./tip20Transfer');
 
 module.exports = class InvoiceService extends cds.ApplicationService {
 
@@ -291,21 +292,66 @@ module.exports = class InvoiceService extends cds.ApplicationService {
       let creator_wallet = req.headers['x-creator-wallet'];
       let chain_id = req.headers['x-chainid'];
       let internal_wallet = req.headers['x-internal-wallet-id'];
-      let tokenizeARInvoice_resp = {};
+      let payAPInvoice_resp = {};
       try{
         var validationError = false;
-        if(!creator_wallet) {
-          req.error(400, "Missing header x-creator-wallet");
-          validationError = true;
-        }
-        if(!chain_id) {
-          req.error(400, "Missing header x-chainid");
-          validationError = true;
-        }
+        // omitting these validations for now
+        // if(!creator_wallet) {
+        //   req.error(400, "Missing header x-creator-wallet");
+        //   validationError = true;
+        // }
+        // if(!chain_id) {
+        //   req.error(400, "Missing header x-chainid");
+        //   validationError = true;
+        // }
         if(validationError === true) {
           throw "Input error";
         }
+        //Start AP payment
+
+        let recipient = "0x930e7F4719678d74f10cD1446F3a4b100f13C0E";
+        let netAmount = req.data.reqData.NetAmount;
+        let taxAmount = req.data.reqData.TaxAmount;
+        let currency = req.data.reqData.Currency;
+
+        console.log("paying net " + netAmount + " currency " + currency);
+        console.log("witholding tax " + taxAmount + " currency " + currency);
+
+        const result = await transferTIP20Token({
+          appId: process.env.PRIVY_APP_ID,
+          appSecret: process.env.PRIVY_API_SECRET,
+          walletId: process.env.PRIVY_WALLET_ID,
+          tokenAddress: '0x20c0000000000000000000000000000000000000', // TIP20 token address
+          recipientAddress: '0x930e7F4719678d74f10cD1446F3a4b100f13C0Ef', // Recipient
+          amount: netAmount,
+          userJwt: '',
+          chainId: 42431 // Tempo testnet
+        });
+
+        const result2 = await transferTIP20Token({
+          appId: process.env.PRIVY_APP_ID,
+          appSecret: process.env.PRIVY_API_SECRET,
+          walletId: process.env.PRIVY_WALLET_ID,
+          tokenAddress: '0x20c0000000000000000000000000000000000000', // TIP20 token address
+          recipientAddress: '0x9b85A2eeaaC93139d155d27915d09ae5e2f4c05a', // Recipient
+          amount: taxAmount,
+          userJwt: '',
+          chainId: 42431 // Tempo testnet
+        });
+
+        console.log('Success!');
+        console.log(result);
+        let successResp = {
+          NetworkChainId : 42431,
+          TxnHash : result.hash,
+          WalletAddress : recipient,
+          Message : `Sent Path USD. Net: ${netAmount} ${currency} to 0x930e7F4719678d74f10cD1446F3a4b100f13C0Ef. Tax Withheld: ${taxAmount} ${currency} to 0x9b85A2eeaaC93139d155d27915d09ae5e2f4c05a`,
+          BlockExplorerLink1 : `https://explore.tempo.xyz/receipt/${result.hash}`,
+          BlockExplorerLink2 : `https://explore.tempo.xyz/receipt/${result2.hash}`
+        };
+        return successResp;
       } catch(error) {
+        console.log(error);
         return false;
       }
     });

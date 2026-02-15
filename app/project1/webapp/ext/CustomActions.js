@@ -62,7 +62,7 @@ sap.ui.define([
             console.log("Selected Wallet ID:", sProviderWalletId);
             console.log("Selected Address:", sAddress);
         },
-        onTokenizePress: function (oEvent) {
+        onPayInvoicePress: function (oEvent) {
             // 'this' is the FE ListReport controller
             var api = this._controller.getExtensionAPI();
             var aCtx = api.getSelectedContexts(); // works with requiresSelection=true
@@ -76,29 +76,31 @@ sap.ui.define([
             // TODO: call your action/backend here
             // console.log("Selected Invoices:", aData);
             var oModel = this._controller.getView().getModel();
-            let tokenizeARInvURL = "/odata/v4/defactor/tokenizeARInvoice";
+            let payAPInvoiceURL = "/invoice/payAPInvoice";
             let arTokenizationReqData = {
                 reqData : {
-                    InvoiceDate : aData[0].CreationDate,
-                    Documents : aData[0].AccountingDocument,
-                    CreditorsTaxNumber : aData[0].VATRegistration,
-                    AssetTitle : "Billing Doc RWA",
-                    CreditorLegalName : "Innovative SAP User",
-                    InvoiceAmount : aData[0].TotalGrossAmount,
-                    PaymentStatus : aData[0].OverallBillingStatus,
-                    AssetId : aData[0].BillingDocument,
-                    CreditorOfficialLocation : aData[0].IncotermsLocation1, 
-                    DebtorDetails : "SoldToParty|"+aData[0].SoldToParty,
-                    PaymentHistory : aData[0].InvoiceClearingStatus,
-                    PaymentDueDate : aData[0].BillingDocumentDate
+                    InvoiceNumber : aData[0].invoiceNumber,
+                    InvoiceDate : aData[0].invoiceDate,
+                    VendorID : aData[0].vendor_vendorID,
+                    PurchaseOrder: aData[0].purchaseOrder,
+                    PurchaseOrderLines : '',
+                    VendorDocXRef1: aData[0].vendorInvoiceRef,
+                    VendorDocXRef2: aData[0].ID,
+                    VendorDocXRef3: '',
+                    VendorAddress: '0x930e7F4719678d74f10cD1446F3a4b100f13C0Ef',
+                    TaxAddress: '0x9b85A2eeaaC93139d155d27915d09ae5e2f4c05a',
+                    NetAmount : aData[0].netAmount,
+                    TaxAmount : aData[0].taxAmount,
+                    TotalAmount: aData[0].grossAmount,
+                    Currency: aData[0].baseCurrency_code
                 }
             }
             BusyIndicator.show();
             let chainid = parseInt(window.appGlobals && window.appGlobals.chainid ? window.appGlobals.chainid : "11155111");
-            let internalWalletId = parseInt(window.appGlobals && window.appGlobals.internalWalletId ? window.appGlobals.internalWalletId : "1");
+            let internalWalletId = parseInt(window.appGlobals && window.appGlobals.internalWalletId ? window.appGlobals.internalWalletId : "3");
             try {
                 $.ajax({
-                    url: '/odata/v4/defactor/',
+                    url: '/invoice/',
                     method: "GET",
                     headers: {
                         "X-CSRF-Token": "Fetch"
@@ -107,27 +109,25 @@ sap.ui.define([
                     success: function (data, textStatus, jqXHR) {
                         var csrfToken = jqXHR.getResponseHeader("X-CSRF-Token");
                         $.ajax({
-                            url: "/odata/v4/defactor/tokenizeARInvoice",
+                            url: payAPInvoiceURL,
                             method: "POST",
                             data: JSON.stringify(arTokenizationReqData),
                             contentType: "application/json",
                             headers: { 
                                 "x-creator-wallet": window.appGlobals && window.appGlobals.creatorWallet ? window.appGlobals.creatorWallet : "",
-                                "x-defactor-token": window.appGlobals && window.appGlobals.defactorJwt ? window.appGlobals.defactorJwt : "",
                                 "x-chainid" : chainid,
                                 "X-CSRF-Token": csrfToken,
-                                "x-defactor-template-uuid" : "6c220776-6094-4d53-863d-1872d224d7ba",
                                 "x-internal-wallet-id": internalWalletId
                             },
                             success: function(data) {
                                 BusyIndicator.hide();
-                                MessageToast.show("Tokenization successful!");
-                                MessageBox.success(`Successfully tokenized AR Invoice: ${aData[0].BillingDocument}. See ${data.BlockExplorerLink} for details.`);
+                                MessageToast.show("Payment successful!");
+                                MessageBox.success(`Successfully paid AP Invoice: ${aData[0].invoiceNumber}. See ${data.BlockExplorerLink1} for net payment details and ${data.BlockExplorerLink2} for tax details`);
                              },
                              
                             error: function(err) { 
                                 BusyIndicator.hide();
-                                MessageBox.error("Tokenization failed.");
+                                MessageBox.error("AP Payment failed.");
                             }
                         });
                         // oModel.loadData(
