@@ -313,6 +313,7 @@ module.exports = class InvoiceService extends cds.ApplicationService {
         let netAmount = req.data.reqData.NetAmount;
         let taxAmount = req.data.reqData.TaxAmount;
         let currency = req.data.reqData.Currency;
+        let invoiceMemoID = req.data.reqData.VendorDocXRef2;
 
         console.log("paying net " + netAmount + " currency " + currency);
         console.log("witholding tax " + taxAmount + " currency " + currency);
@@ -324,9 +325,15 @@ module.exports = class InvoiceService extends cds.ApplicationService {
           tokenAddress: '0x20c0000000000000000000000000000000000000', // TIP20 token address
           recipientAddress: '0x930e7F4719678d74f10cD1446F3a4b100f13C0Ef', // Recipient
           amount: netAmount,
+          memo: invoiceMemoID,
           userJwt: '',
           chainId: 42431 // Tempo testnet
         });
+
+        let taxMemo = {
+          invoice: invoiceMemoID,
+          invoiceHash : result.hash
+        }
 
         const result2 = await transferTIP20Token({
           appId: process.env.PRIVY_APP_ID,
@@ -335,6 +342,7 @@ module.exports = class InvoiceService extends cds.ApplicationService {
           tokenAddress: '0x20c0000000000000000000000000000000000000', // TIP20 token address
           recipientAddress: '0x9b85A2eeaaC93139d155d27915d09ae5e2f4c05a', // Recipient
           amount: taxAmount,
+          memo: JSON.stringify(taxMemo),
           userJwt: '',
           chainId: 42431 // Tempo testnet
         });

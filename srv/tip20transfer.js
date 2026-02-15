@@ -24,6 +24,7 @@ async function transferTIP20Token(config) {
     tokenAddress,
     recipientAddress,
     amount,
+    memo,
     decimals = 6,
     userJwt,
     chainId = 42431
@@ -47,18 +48,26 @@ async function transferTIP20Token(config) {
     throw new Error(`Invalid recipient address format: ${error.message}`);
   }
 
+  // Convert memo to bytes32
+  const memoBytes32 = convertToBytes32(memo);
+
   // Create ERC20 transfer function call data
   const erc20Interface = new ethers.Interface([
-    'function transfer(address to, uint256 amount) returns (bool)'
+    'function transferWithMemo(address to, uint256 amount, bytes32 memo) returns (bool)'
   ]);
   
   // Convert amount to token units
   const amountInUnits = ethers.parseUnits(amount.toString(), decimals);
   
   // Encode the transfer function call
-  const data = erc20Interface.encodeFunctionData('transfer', [
+//   const data = erc20Interface.encodeFunctionData('transfer', [
+//     validatedRecipientAddress,
+//     amountInUnits
+//   ]);
+  const data = erc20Interface.encodeFunctionData('transferWithMemo', [
     validatedRecipientAddress,
-    amountInUnits
+    amountInUnits,
+    memoBytes32
   ]);
 
   // Send the transaction
@@ -77,6 +86,40 @@ async function transferTIP20Token(config) {
     });
 
   return response;
+}
+
+/**
+ * Convert a string memo to bytes32 format
+ * Supports multiple encoding strategies
+ */
+function convertToBytes32(memo) {
+  if (!memo || memo === '') {
+    // Return zero bytes for empty memo
+    return ethers.ZeroHash;
+  }
+
+  // Strategy 1: Direct string encoding (max 32 characters)
+  if (memo.length <= 32) {
+    return ethers.encodeBytes32String(memo);
+  }
+  
+  // Strategy 2: Hash longer strings (for invoice IDs, references, etc.)
+  // This is useful for longer invoice numbers or UUIDs
+  return ethers.keccak256(ethers.toUtf8Bytes(memo));
+}
+
+/**
+ * Decode bytes32 memo back to string
+ * Useful for reading transaction memos
+ */
+function decodeBytes32Memo(bytes32) {
+  try {
+    // Try to decode as string
+    return ethers.decodeBytes32String(bytes32);
+  } catch (error) {
+    // If it's a hash, return the hash itself
+    return bytes32;
+  }
 }
 
 module.exports = { transferTIP20Token };
