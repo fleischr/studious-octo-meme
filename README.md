@@ -24,7 +24,7 @@ You'll see a list of invoices. Click go to get a list of invoices. Now click but
 
 ## About the hackathon entrant
 
-Ryan Fleischmann is a SAP BTP Architect at AppZen - a leading AI startup in AP automation and fraud prevention. Ryan previously also recently worked at Thomson Reuters ONESOURCE where he led teams integrating SAP BTP with ONESOURCE's tax provision, statutory reporting, global trade, ESG and AI platforms and products. Ryan has worked with various other ERP/SAP implementations for nearly 14 years now.
+[Ryan Fleischmann](https://www.linkedin.com/in/ryan-fleischmann-3aa59712) is a SAP BTP Architect at AppZen - a leading AI startup in AP automation and fraud prevention. Ryan previously also recently worked at Thomson Reuters ONESOURCE where he led teams integrating SAP BTP with ONESOURCE's tax provision, statutory reporting, global trade, ESG and AI platforms and products. Ryan has worked with various other ERP/SAP implementations for nearly 14 years now.
 
 Ryan's previous history in web3 includes working with Defactor, the Enterprise Ethereum Alliance, Baseline Protocol, KlimaDAO/Carbonmark, and Provide
 
